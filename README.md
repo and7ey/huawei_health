@@ -446,10 +446,14 @@ template:
   [`.github/workflows/release.yml`](.github/workflows/release.yml): push тега `vX.Y.Z`
   (версия в `manifest.json` должна совпадать) → артефакт `huawei_health.zip` внутри
   содержит путь `custom_components/huawei_health/`, как ожидает HACS.
-- Для публикации в HACS нужны: `hacs.json`, `manifest.json` с `domain/name/version/
-  documentation/issue_tracker/codeowners/config_flow/iot_class/integration_type`,
-  `translations/en.json`, `LICENSE`, минимум один релиз и topic `home-assistant` (и
-  `hacs`) на репозитории.
+- Для публикации в HACS нужны (это проверяет `hacs/action`, а не только ревью каталога):
+  `hacs.json`, `manifest.json` с `domain/name/version/documentation/issue_tracker/codeowners/
+  config_flow/iot_class/integration_type`, `translations/en.json`, `LICENSE`, минимум один
+  релиз, топики `home-assistant` **и** один из `integration`/`custom-component` на
+  репозитории, и бренд-ассет `custom_components/huawei_health/brand/icon.png` (или запись
+  о домене в `home-assistant/brands`) — без него валидация падает с `Validation brands`.
+  Иконка лежит в репозитории, регенерируется `python3 tools/make_icon.py …` (чистый
+  stdlib, 512×512, прозрачный фон).
 
 ## Лицензия
 
