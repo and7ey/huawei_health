@@ -1,0 +1,101 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "HUAWEI ID sign-in in a browser",
+        "description": "No Huawei Health app is involved: the cloud mints the token pair after an ordinary HUAWEI ID sign-in in a browser. Only the consent step is manual, everything else the integration does itself.\n\n**Step 1. Open the sign-in page in a normal browser** (Chrome, Firefox, whatever you use):\n\n[{authorize_url}]({authorize_url})\n\n**Step 2. Switch the browser into mobile device mode.** The *Allow* button on the consent page responds to touch only — a mouse click does nothing.\n\n1. Press **F12** (or **Ctrl+Shift+I**, on macOS **Cmd+Option+I**) to open DevTools.\n2. Press **Ctrl+Shift+M** (on macOS **Cmd+Shift+M**) — that is the *Toggle device toolbar* button in the top-left corner of the DevTools panel.\n3. In the bar that appears, pick a device such as **iPhone 12 Pro** or **Pixel 7** and press **Reload** (the round arrow in the same bar).\n4. The page reloads with the mobile layout: scroll to the bottom and press **Allow** — the cursor now behaves like a finger.\n\n**Step 3. Come back here** and paste the address the browser stopped on in the next step.\n\nFull instructions, click by click: {docs}"
+      },
+      "code": {
+        "title": "Paste the address that carries the code",
+        "description": "**Where the code lives.** After you press *Allow* the browser tries to open a link like `hms://redirect_url?code=...` and cannot: no application on this computer registers that scheme. Chrome says so in the console, and that line is what is needed:\n\n```\nFailed to launch 'hms://redirect_url?code=EQFEAQNaOARz0K1p%2BmR7sT4uVwXyZ0...%3D%3D&state=9f2c1ab7' because the scheme does not have a registered handler.\n```\n\n1. In DevTools open the **Console** tab (F12 → Console).\n2. Find the line starting with `Failed to launch 'hms://redirect_url?code=`.\n3. Copy the whole line — the `Failed to launch` and `because the scheme...` text around it is fine, the integration throws it away. The `hms://redirect_url?code=...` address from the address bar works too.\n4. Paste it below and press **Submit**.\n\nThe code is single-use and lives a few minutes. If it is refused, open the sign-in page from step 1 again and repeat the whole procedure."
+      },
+      "reauth_confirm": {
+        "title": "Sign-in required again",
+        "description": "The session of **{account}** can no longer be refreshed: the refresh token expired (Huawei issues it for 180 days) or was revoked by a sign-out.\n\nNothing has to be deleted: sign in again in the browser and the integration will put the new tokens into this same entry — history and sensor settings stay intact.\n\n**Step 1.** Open the sign-in page: [{authorize_url}]({authorize_url})\n\n**Step 2.** Turn on mobile device mode in DevTools (**F12**, then **Ctrl+Shift+M**), otherwise the *Allow* button will not react to the mouse.\n\n**Step 3.** Copy the `Failed to launch 'hms://redirect_url?code=...'` line from DevTools → Console and paste it in the next step.\n\nDetails: {docs}"
+      }
+    },
+    "abort": {
+      "already_configured": "This HUAWEI ID account is already set up.",
+      "reauth_successful": "Done: tokens refreshed and the account reloaded.",
+      "unsupported_import": "YAML configuration is not supported: add the account under Integrations."
+    },
+    "error": {
+      "no_code": "No code in that field: paste an address like hms://redirect_url?code=... from the browser console.",
+      "invalid_code": "Huawei refused the code: already used, expired, or another account signed in. Open the sign-in page again and repeat.",
+      "cannot_connect": "The Huawei cloud could not be reached. Check the network and try again.",
+      "unknown": "Unknown error. See the Home Assistant log for details."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Account settings",
+        "description": "Every account is configured on its own. Changes are applied without restarting Home Assistant.",
+        "data": {
+          "update_interval": "Poll interval, minutes",
+          "history_days": "Days of daily data to keep",
+          "workout_days": "How many days back to look for workouts",
+          "enable_workouts": "Poll workouts (getSportsDataByTime)",
+          "enable_health_metrics": "Poll heart rate, sleep and stress (getHealthStat)",
+          "device_code": "deviceCode of one device (0 = whole account)"
+        },
+        "data_description": {
+          "update_interval": "Below 5 minutes is pointless: the app cloud only moves when a watch or phone syncs.",
+          "history_days": "Affects the daily sensors; up to 30 days still costs a single request.",
+          "workout_days": "Workouts are read in 10-day windows (a hard cloud limit), so 30 days is three requests.",
+          "device_code": "/profile/device/getBindDevice lists the codes. Setting a watch's code restricts the daily totals to that device.",
+          "enable_workouts": "Turn off if you never record workouts: it drops the slowest request.",
+          "enable_health_metrics": "Turn off if no device measures heart rate or sleep."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "steps": { "name": "Steps today" },
+      "distance": { "name": "Distance today" },
+      "calories": { "name": "Calories today" },
+      "activity_duration": { "name": "Activity today" },
+      "walking_duration": { "name": "Walking today" },
+      "active_hours": { "name": "Active hours today" },
+      "moderate_high_intensity_minutes": { "name": "Moderate-to-vigorous minutes today" },
+      "step_goal": { "name": "Step goal" },
+      "resting_heart_rate": { "name": "Resting heart rate" },
+      "heart_rate": { "name": "Heart rate" },
+      "max_heart_rate": { "name": "Max heart rate today" },
+      "min_heart_rate": { "name": "Min heart rate today" },
+      "sleep_duration": { "name": "Sleep" },
+      "sleep_deep": { "name": "Deep sleep" },
+      "sleep_rem": { "name": "REM sleep" },
+      "sleep_light": { "name": "Light sleep" },
+      "sleep_awake": { "name": "Awake during sleep" },
+      "sleep_score": { "name": "Sleep score" },
+      "sleep_efficiency": { "name": "Sleep efficiency" },
+      "sleep_hrv": { "name": "HRV during sleep" },
+      "sleep_spo2": { "name": "SpO2 during sleep" },
+      "stress": { "name": "Stress" },
+      "stress_last": { "name": "Stress (last measurement)" },
+      "last_activity": {
+        "name": "Last activity",
+        "state": {
+          "stairs": "Stairs",
+          "hill": "Hill / trail",
+          "cycling": "Cycling",
+          "running": "Running",
+          "walking": "Walking",
+          "deep_sleep": "Deep sleep",
+          "light_sleep": "Light sleep",
+          "awake": "Awake",
+          "swimming": "Swimming",
+          "other": "Other",
+          "unknown": "Unknown type"
+        }
+      },
+      "last_activity_duration": { "name": "Last activity duration" },
+      "last_activity_distance": { "name": "Last activity distance" },
+      "last_activity_calories": { "name": "Last activity calories" },
+      "workouts": { "name": "Workouts in period" },
+      "relogin_in": { "name": "Re-login due in days" }
+    }
+  }
+}

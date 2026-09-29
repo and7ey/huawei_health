@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  package:
+    name: Build and attach the HACS package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The tag must match manifest.json
+        run: |
+          version=$(python3 -c "import json;print(json.load(open('custom_components/huawei_health/manifest.json'))['version'])")
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$version" != "$tag" ]; then
+            echo "manifest.json says $version, the tag says $tag" >&2
+            exit 1
+          fi
+
+      - name: Pack custom_components for HACS
+        run: zip -r huawei_health.zip custom_components -x "*__pycache__*"
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: huawei_health.zip
+          generate_release_notes: true

@@ -1,0 +1,14 @@
+{
+  "domain": "huawei_health",
+  "name": "Huawei Health",
+  "codeowners": [
+    "@and7ey"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/and7ey/huawei_health",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/and7ey/huawei_health/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
