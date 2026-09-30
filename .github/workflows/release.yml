@@ -23,7 +23,9 @@ jobs:
           fi
 
       - name: Pack custom_components for HACS
-        run: zip -r huawei_health.zip custom_components -x "*__pycache__*"
+        run: |
+          cd custom_components
+          zip -r ../../huawei_health.zip huawei_health -x "*__pycache__*"
 
       - uses: softprops/action-gh-release@v2
         with:
