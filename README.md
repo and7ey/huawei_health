@@ -93,11 +93,11 @@ APK версии 16.1.6.320 (dex-код `defpackage/*`, `HealthDataCloudFactory`
 
 ### HACS
 
-1. Откройте **HACS → Integrations → ⋮ (три точки) → Custom repositories**.
-2. Type: `Integration`, Repository: `and7ey/huawei_health`, нажмите **Add**.
-3. В списке найдите **Huawei Health** → **Download** → перезапустите Home Assistant
-   (**Инструменты developer → YAML → Перезапустить службу** — не «перезагрузка конфигурации»,
-   а именно перезапуск).
+1. Откройте **HACS → ⋮ (три точки) → Custom repositories**.
+2. Type: `Integration`, Repository: `https://github.com/and7ey/huawei_health`, нажмите **Add**.
+3. В списке поиском найдите **Huawei Health** → синяя кнопка **Download**.
+4. Перезапустите Home Assistant (**Settings → System → кнопка Выключения → Restart Home Assistant** — не «перезагрузка конфигурации»,
+   а именно перезапуск системы).
 
 ### Вручную
 
