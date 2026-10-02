@@ -24,16 +24,13 @@ jobs:
 
       - name: Create HACS-compatible archive
         run: |
-          # Create temp directory with correct structure for HA
-          mkdir -p _package/huawei_health
-          cp -r custom_components/huawei_health/* _package/huawei_health/
+          # Remove __pycache__ dirs first
+          find custom_components/huawei_health -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
           
-          # Remove __pycache__ dirs
-          find _package/huawei_health -type d -name '__pycache__' -exec rm -rf {} + 2>/dev/null || true
-          
-          # Zip the folder named 'huawei_health' at root of archive
-          cd _package
-          zip -r ../huawei_health.zip huawei_health
+          # Zip only the integration files directly to root of archive (no wrapper folder)
+          # This ensures proper installation path in HA
+          cd custom_components/huawei_health
+          zip -r ../../huawei_health.zip *
 
       - uses: softprops/action-gh-release@v2
         with:
