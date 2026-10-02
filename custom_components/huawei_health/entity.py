@@ -14,7 +14,8 @@ CLOUD_URL = "https://health.cloud.huawei.com"
 class HuaweiHealthEntity(CoordinatorEntity[HuaweiHealthCoordinator]):
     """One account is one service device; every sensor of it hangs off that device."""
 
-    _attr_has_entity_name = True
+    # Disable entity naming to avoid area prefix in entity_id
+    _attr_has_entity_name = False
 
     def __init__(self, data: HuaweiHealthData) -> None:
         super().__init__(data.coordinator)
