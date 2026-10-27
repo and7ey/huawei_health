@@ -126,7 +126,7 @@ DESCRIPTIONS: tuple[HuaweiSensorDescription, ...] = (
         key="calories", translation_key="calories", name="Calories today",
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_CALORIE,
-        suggested_display_precision=0, state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0, state_class=SensorStateClass.TOTAL,
         icon="mdi:fire",
         value=day_value("kcal"), attributes=day_date("kcal")),
     HuaweiSensorDescription(
@@ -267,7 +267,7 @@ DESCRIPTIONS: tuple[HuaweiSensorDescription, ...] = (
         key="last_activity_calories", translation_key="last_activity_calories", name="Last activity calories",
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_CALORIE,
-        suggested_display_precision=0, state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0, state_class=SensorStateClass.TOTAL,
         icon="mdi:fire", value=session_value("kcal"), attributes=session_attributes),
     HuaweiSensorDescription(
         key="workouts", translation_key="workouts", name="Workouts in period", native_unit_of_measurement="workouts",
